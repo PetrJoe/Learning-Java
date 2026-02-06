@@ -13,14 +13,14 @@ import java.util.Map;
 @Tag(name = "Welcome", description = "Welcome endpoint")
 public class WelcomeController {
 
-    @GetMapping("/")
+    @GetMapping("/welcome")
     @Operation(summary = "Welcome endpoint", description = "Returns API information and links")
     @ApiResponse(responseCode = "200", description = "Welcome message")
     public ResponseEntity<Map<String, String>> welcome() {
         Map<String, String> response = new HashMap<>();
         response.put("message", "Welcome to Product Management API");
         response.put("version", "1.0.0");
-        response.put("swagger-ui", "http://localhost:8080/swagger-ui.html");
+        response.put("swagger-ui", "http://localhost:8080/swagger-ui/index.html");
         response.put("api-docs", "http://localhost:8080/api-docs");
         response.put("products-endpoint", "http://localhost:8080/api/products");
         return ResponseEntity.ok(response);
