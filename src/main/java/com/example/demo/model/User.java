@@ -29,6 +29,14 @@ public class User {
     @Schema(description = "The role of the user", example = "ROLE_USER")
     private String role;
 
+    @Column
+    @Schema(description = "The first name of the user", example = "John")
+    private String firstName;
+
+    @Column
+    @Schema(description = "The last name of the user", example = "Doe")
+    private String lastName;
+
     // Constructors
     public User() {
     }
@@ -79,5 +87,21 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
