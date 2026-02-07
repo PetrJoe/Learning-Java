@@ -4,8 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class AuthRequest {
     
-    @Schema(description = "Username for authentication", example = "john_doe")
+    @Schema(description = "Username for authentication (optional for login)", example = "john_doe")
     private String username;
+
+    @Schema(description = "Email address (required for login)", example = "john.doe@example.com")
+    private String email;
     
     @Schema(description = "Password for authentication", example = "secret123")
     private String password;
@@ -16,6 +19,14 @@ public class AuthRequest {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

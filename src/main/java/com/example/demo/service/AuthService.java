@@ -19,24 +19,30 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     public User register(AuthRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
+        }
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already exists");
         }
         User user = new User();
         user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole("ROLE_USER");
         return userRepository.save(user);
     }
 
     public String login(AuthRequest request) {
-        Optional<User> userOptional = userRepository.findByUsername(request.getUsername());
+        // Try login by email
+        Optional<User> userOptional = userRepository.findByEmail(request.getEmail());
+        
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 return "Login successful! (Token generation would happen here)";
             }
         }
-        throw new RuntimeException("Invalid username or password");
+        throw new RuntimeException("Invalid email or password");
     }
 }
