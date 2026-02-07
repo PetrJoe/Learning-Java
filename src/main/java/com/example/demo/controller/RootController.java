@@ -10,9 +10,4 @@ public class RootController {
     public String redirectToSwagger() {
         return "redirect:/swagger-ui/index.html";
     }
-
-    @GetMapping("/swagger-ui.html")
-    public String redirectLegacySwagger() {
-        return "redirect:/swagger-ui/index.html";
-    }
 }
