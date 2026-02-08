@@ -18,11 +18,10 @@ public class WelcomeController {
     @ApiResponse(responseCode = "200", description = "Welcome message")
     public ResponseEntity<Map<String, String>> welcome() {
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Welcome to Product Management API");
+        response.put("message", "Welcome to Demo API");
         response.put("version", "1.0.0");
         response.put("swagger-ui", "http://localhost:8080/swagger-ui/index.html");
         response.put("api-docs", "http://localhost:8080/api-docs");
-        response.put("products-endpoint", "http://localhost:8080/api/products");
         return ResponseEntity.ok(response);
     }
 

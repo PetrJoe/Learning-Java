@@ -12,8 +12,8 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
             .info(new Info()
-                .title("Product Management API")
+                .title("Demo API")
                 .version("1.0.0")
-                .description("API for managing products with CRUD operations"));
+                .description("Demo API application"));
     }
 }
