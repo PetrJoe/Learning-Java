@@ -30,6 +30,9 @@ public class AuthService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private BankingService bankingService;
+
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AuthService.class);
 
     public User register(AuthRequest request) {
@@ -43,8 +46,10 @@ public class AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
         user.setRole("ROLE_USER");
-        user.setEnabled(false); // User must verify email
+        user.setEnabled(true); // User must verify email
         
         // Generate random 6-digit code
         String code = String.valueOf((int) (Math.random() * 900000) + 100000);
@@ -53,6 +58,9 @@ public class AuthService {
         logger.info("Verification Code for {}: {}", user.getEmail(), code);
         
         User savedUser = userRepository.save(user);
+        
+        // Create default accounts for all currencies
+        bankingService.createDefaultAccounts(savedUser);
         
         emailService.sendVerificationEmail(user.getEmail(), code);
         

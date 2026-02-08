@@ -13,6 +13,12 @@ public class AuthRequest {
     @Schema(description = "Password for authentication", example = "secret123")
     private String password;
 
+    @Schema(description = "First Name", example = "John")
+    private String firstName;
+
+    @Schema(description = "Last Name", example = "Doe")
+    private String lastName;
+
     public String getUsername() {
         return username;
     }
@@ -36,4 +42,10 @@ public class AuthRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 }
