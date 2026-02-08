@@ -27,6 +27,9 @@ public class AuthService {
     @Autowired
     private RefreshTokenService refreshTokenService;
 
+    @Autowired
+    private EmailService emailService;
+
     public User register(AuthRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
@@ -39,7 +42,36 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole("ROLE_USER");
-        return userRepository.save(user);
+        user.setEnabled(false); // User must verify email
+        
+        // Generate random 6-digit code
+        String code = String.valueOf((int) (Math.random() * 900000) + 100000);
+        user.setVerificationCode(code);
+        
+        System.out.println("Verification Code for " + user.getEmail() + ": " + code);
+        
+        User savedUser = userRepository.save(user);
+        
+        emailService.sendVerificationEmail(user.getEmail(), code);
+        
+        return savedUser;
+    }
+
+    public void verifyUser(String email, String code) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.isEnabled()) {
+            throw new RuntimeException("User already verified");
+        }
+
+        if (code.equals(user.getVerificationCode())) {
+            user.setEnabled(true);
+            user.setVerificationCode(null);
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Invalid verification code");
+        }
     }
 
     public JwtResponse login(AuthRequest request) {
@@ -48,6 +80,11 @@ public class AuthService {
         
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+            
+            if (!user.isEnabled()) {
+                throw new RuntimeException("Account is not verified. Please verify your email.");
+            }
+
             if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
                 UserDetails userDetails = org.springframework.security.core.userdetails.User
                         .withUsername(user.getEmail()) // Use email as username for Spring Security

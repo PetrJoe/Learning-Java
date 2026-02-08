@@ -37,6 +37,14 @@ public class User {
     @Schema(description = "The last name of the user", example = "Doe")
     private String lastName;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Schema(description = "Whether the user is verified", example = "false")
+    private boolean enabled = false;
+
+    @Column
+    @Schema(description = "Verification code", example = "123456")
+    private String verificationCode;
+
     // Constructors
     public User() {
     }
@@ -103,5 +111,21 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
     }
 }
