@@ -30,6 +30,8 @@ public class AuthService {
     @Autowired
     private EmailService emailService;
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AuthService.class);
+
     public User register(AuthRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
@@ -48,7 +50,7 @@ public class AuthService {
         String code = String.valueOf((int) (Math.random() * 900000) + 100000);
         user.setVerificationCode(code);
         
-        System.out.println("Verification Code for " + user.getEmail() + ": " + code);
+        logger.info("Verification Code for {}: {}", user.getEmail(), code);
         
         User savedUser = userRepository.save(user);
         
